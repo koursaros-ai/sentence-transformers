@@ -15,7 +15,7 @@ if PASS == None or CERT_PATH == None:
 DBNAME = 'fever'
 SSLMODE = 'verify-ca'
 __location__ = os.path.dirname(__file__)
-POSTGRES_DSN = f'''dbname='fever' user='{USER}' host='{HOST}' password='{PASS}' '''
+POSTGRES_DSN = f'''dbname='fever' user='{USER}' host='{HOST}' password='{PASS}' sslmode='{SSLMODE}'''''
 
 class FEVERReader:
 
