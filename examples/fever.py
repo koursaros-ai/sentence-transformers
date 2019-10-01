@@ -8,6 +8,7 @@ from numpy import dot
 from numpy.linalg import norm
 import time
 import psycopg2
+from psycopg2.extras import execute_values
 
 HOST = '54.196.150.193'
 USER = 'postgres'
@@ -20,6 +21,7 @@ DBNAME = 'fever'
 os.environ['PGSSLMODE'] = 'verify-ca'
 __location__ = os.path.dirname(__file__)
 POSTGRES_DSN = f'''dbname='fever' user='{USER}' host='{HOST}' password='{PASS}' '''
+BATCH_SIZE = 1000
 
 def main():
     model = SentenceTransformer('bert-large-nli-mean-tokens')
@@ -80,9 +82,18 @@ def eval():
         return [(*b[2:], s) for b, s in zip(batch, scores)]
 
     to_dump = score(res)
-    for row in to_dump:
-        cur.execute('INSERT INTO test.knn_benchmark VALUES (%s, %s, %s, %s)', row)
-    conn.commit()
+    buffer = []
+
+    for i, row in enumerate(to_dump):
+        buffer.append(row)
+        if i and i % BATCH_SIZE == 0:
+            execute_values(cur, 'INSERT INTO test.knn_benchmark VALUES %s', buffer)
+            conn.commit()
+            buffer.clear()
+    if len(buffer) > 0:
+        execute_values(cur, 'INSERT INTO test.knn_benchmark VALUES %s', buffer)
+        conn.commit()
+        buffer.clear()
     conn.close()
 
 
