@@ -62,7 +62,7 @@ def eval():
         join wiki.lines l on l.article_id = a.id
         left join test.knn_benchmark b on b.claim_id = c.id 
         and b.line_number = l.line_number and b.article_id = l.article_id
-        where is_test_set and b.claim_id is null
+        where is_test_set and b.claim_id is null and verifiable
         ''')
     res = cur.fetchall()
 
@@ -101,3 +101,9 @@ def eval():
 if __name__ == '__main__':
     # main()
     eval()
+
+    # CONVERT TO TENSORFLOW FOR BERT_AS_A_SERVICE?
+    # from pytorch_transformers.convert_pytorch_checkpoint_to_tf import convert_pytorch_checkpoint_to_tf
+    #
+    # model = BertModel.from_pretrained("./data/finetuned_lm")
+    # convert_pytorch_checkpoint_to_tf(model, "./data/finetuned_lm_tf", "fine_tuned_tf")
