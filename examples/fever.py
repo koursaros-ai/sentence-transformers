@@ -5,7 +5,7 @@ from sentence_transformers.evaluation import EmbeddingSimilarityEvaluator
 from torch.utils.data import DataLoader
 
 def main():
-    model = SentenceTransformer('bert-base-nli-mean-tokens')
+    model = SentenceTransformer('bert-large-nli-mean-tokens')
     train_batch_size = 1
     num_epochs = 1
     warmup_steps = 100
