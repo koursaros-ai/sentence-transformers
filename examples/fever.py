@@ -24,16 +24,17 @@ POSTGRES_DSN = f'''dbname='fever' user='{USER}' host='{HOST}' password='{PASS}' 
 BATCH_SIZE = 1000
 
 def main():
-    model = SentenceTransformer('bert-large-nli-mean-tokens')
+    model_a = SentenceTransformer('bert-large-nli-mean-tokens')
+    model_b = SentenceTransformer('bert-large-nli-mean-tokens')
     train_batch_size = 2
     num_epochs = 1
     warmup_steps = 100
     model_save_path = './fever-output'
     reader = FEVERReader()
     train_examples = reader.get_examples('train',table='test.scorer_train_title')
-    train_data = SentencesDataset(train_examples, model)
+    train_data = SentencesDataset(train_examples, model_a)
     train_dataloader = DataLoader(train_data, shuffle=True, batch_size=train_batch_size)
-    train_loss = losses.CosineSimilarityLoss(model=model)
+    train_loss = losses.CosineSimilarityLoss(model)
 
     dev_examples = reader.get_examples('dev',table='test.scorer_test_title')
     dev_data = SentencesDataset(examples=dev_examples, model=model)
