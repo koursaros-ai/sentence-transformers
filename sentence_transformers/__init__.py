@@ -4,4 +4,5 @@ from .datasets import SentencesDataset, SentenceLabelDataset
 from .data_samplers import LabelSampler
 from .LoggingHandler import LoggingHandler
 from .SentenceTransformer import SentenceTransformer
+from .BiSentenceTransformer import BiSentenceTransformer
 
