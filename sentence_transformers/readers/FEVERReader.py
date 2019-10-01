@@ -13,7 +13,7 @@ if PASS == None or PGSSLROOTCERT == None:
     print("Please set PG_PASS and CERT_PATH env variable")
     raise SystemExit()
 DBNAME = 'fever'
-SSLMODE = 'verify-ca'
+os.environ['PGSSLMODE'] = 'verify-ca'
 __location__ = os.path.dirname(__file__)
 POSTGRES_DSN = f'''dbname='fever' user='{USER}' host='{HOST}' password='{PASS}'''
 
