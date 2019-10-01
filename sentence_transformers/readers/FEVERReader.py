@@ -38,10 +38,12 @@ class FEVERReader:
         """
         conn = psycopg2.connect(POSTGRES_DSN)
         cur = conn.cursor()
+        print('connected to postgres')
         cur.execute(f'''
                 select * from {table} order by random()
                 ''')
         res = cur.fetchall()
+        print('downloading data')
         examples = []
         for id, row in enumerate(res):
             score = float(row[self.score_idx])
