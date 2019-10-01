@@ -58,8 +58,7 @@ def eval():
         join test.elastic el on c.id = el.claim_id
         join wiki.articles a on a.fever_id = any(el.fever_ids)
         join wiki.lines l on l.article_id = a.id
-        and l.line_number = b.line_number and l.article_id = b.article_id
-        where b.claim_id is null and is_blind_set
+        where is_test_set
         limit 1000
         ''')
     res = cur.fetchall()
