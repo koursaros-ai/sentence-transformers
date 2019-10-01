@@ -67,10 +67,16 @@ def eval():
     def score(batch):
         claims = [x[0] for x in batch]
         evidences = [x[1] for x in batch]
+        start = time.time()
         claim_vectors = model.encode(claims)
+        print(f'encoded claims in {time.time() - start} seconds')
+        state = time.time()
         ev_vectors = model.encode(evidences)
-        scores = [dot(claim, evidence) / (norm(claim) * norm(evidence))
+        print(f'encoded evidence in {time.time() - start} seconds')
+        start = time.time()
+        scores = [float(dot(claim, evidence)) / (norm(claim) * norm(evidence))
                   for claim, evidence in zip(claim_vectors, ev_vectors) ]
+        print(f'scored in {time.time() - start} seconds')
         return [(*b[2:], s) for b, s in zip(batch, scores)]
 
     to_dump = score(res)
