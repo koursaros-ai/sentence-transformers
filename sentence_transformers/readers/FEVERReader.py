@@ -32,7 +32,7 @@ class FEVERReader:
         self.s2_idx = s2_idx
         self.score_idx = score_idx
 
-    def get_examples(self, filename=None, table=None, max_examples=0):
+    def get_examples(self, split, filename=None, table=None, max_examples=0,):
         """
         filename specified which data split to use (train.csv, dev.csv, test.csv).
         """
@@ -40,8 +40,9 @@ class FEVERReader:
         conn = psycopg2.connect(POSTGRES_DSN)
         cur = conn.cursor()
         print('connected to postgres')
+        limit = 'limit 500' if split == 'dev' else 'limit 10000'
         cur.execute(f'''
-                select * from {table} order by random()
+                select * from {table} order by random() {limit}
                 ''')
         res = cur.fetchall()
         print('downloading data')
