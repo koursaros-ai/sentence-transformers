@@ -59,7 +59,6 @@ def eval():
         join wiki.articles a on a.fever_id = any(el.fever_ids)
         join wiki.lines l on l.article_id = a.id
         where is_test_set
-        limit 1000
         ''')
     res = cur.fetchall()
 

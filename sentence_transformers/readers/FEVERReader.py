@@ -41,7 +41,7 @@ class FEVERReader:
         cur = conn.cursor()
         print('connected to postgres')
         cur.execute(f'''
-                select * from {table} order by random() limit 5000
+                select * from {table} order by random()
                 ''')
         res = cur.fetchall()
         print('downloading data')
