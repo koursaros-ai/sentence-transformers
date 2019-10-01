@@ -8,15 +8,14 @@ import psycopg2
 HOST = '54.196.150.193'
 USER = 'postgres'
 PASS = os.environ.get('PG_PASS')
-if PASS == None:
-    print("Please set PG_PASS env variable")
+CERT_PATH = os.environ.get('CERT_PATH')
+if PASS == None or CERT_PATH == None:
+    print("Please set PG_PASS and CERT_PATH env variable")
     raise SystemExit()
 DBNAME = 'fever'
 SSLMODE = 'verify-ca'
 __location__ = os.path.dirname(__file__)
 POSTGRES_DSN = f'''dbname='fever' user='{USER}' host='{HOST}' password='{PASS}' '''
-
-CERT_PATH = f'{__location__}/../../credentials/postgres.pem'
 
 class FEVERReader:
 
