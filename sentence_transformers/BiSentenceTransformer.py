@@ -26,9 +26,9 @@ class BiSentenceTransformer(nn.Module):
     def forward(self, features):
         sent_a, sent_b = features
         features_a = self.model_a(sent_a)['sentence_embedding']
-        features_b = self.model_b(sent_b)
-        features.update({'embedding_a' : features_a, 'embedding_b' : features_b})
-        return features
+        features_b = self.model_b(sent_b)['sentence_embedding']
+        # features.update({'embedding_a' : features_a, 'embedding_b' : features_b})
+        return features_a, features_b
 
     def fit(self,
             train_objective: Tuple[DataLoader, nn.Module],
@@ -133,7 +133,6 @@ class BiSentenceTransformer(nn.Module):
                     data_iterator = iter(dataloader)
                     data = next(data_iterator)
 
-                print(data)
                 features, labels = batch_to_device(data, self.device)
                 loss_value = loss_model(features, labels)
 
