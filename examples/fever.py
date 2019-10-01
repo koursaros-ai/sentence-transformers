@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 
 def main():
     model = SentenceTransformer('bert-large-nli-mean-tokens')
-    train_batch_size = 1
+    train_batch_size = 2
     num_epochs = 1
     warmup_steps = 100
     model_save_path = './fever-output'
