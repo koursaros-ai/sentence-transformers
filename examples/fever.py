@@ -82,8 +82,8 @@ def eval():
     to_dump = score(res)
     for row in to_dump:
         cur.execute('INSERT INTO test.knn_benchmark VALUES (%s, %s, %s, %s)', row)
-    cur.commit()
-    cur.close()
+    conn.commit()
+    conn.close()
 
 
 
