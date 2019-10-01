@@ -22,7 +22,6 @@ class BiSentenceTransformer(nn.Module):
         self.model_a = model_a
         self.model_b = model_b
 
-
     def forward(self, features):
         sent_a, sent_b = features
         features_a = self.model_a(sent_a)['sentence_embedding']
