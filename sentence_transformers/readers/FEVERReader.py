@@ -10,7 +10,7 @@ USER = 'postgres'
 PASS = os.environ.get('PG_PASS')
 PGSSLROOTCERT = os.environ.get('PGSSLROOTCERT')
 if PASS == None or PGSSLROOTCERT == None:
-    print("Please set PG_PASS and CERT_PATH env variable")
+    print("Please set PG_PASS and PGSSLROOTCERT env variable")
     raise SystemExit()
 DBNAME = 'fever'
 os.environ['PGSSLMODE'] = 'verify-ca'
