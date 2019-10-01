@@ -58,7 +58,8 @@ def eval():
         join test.elastic el on c.id = el.claim_id
         join wiki.articles a on a.fever_id = any(el.fever_ids)
         join wiki.lines l on l.article_id = a.id
-        where is_test_set limit 10000
+        left join test.knn_benchmark b on b.claim_id = c.id
+        where is_test_set and b.claim_id is null limit 20000 
         ''')
     res = cur.fetchall()
 
@@ -83,8 +84,6 @@ def eval():
         cur.execute('INSERT INTO test.knn_benchmark VALUES (%s, %s, %s, %s)', row)
     conn.commit()
     conn.close()
-
-
 
 
 if __name__ == '__main__':
