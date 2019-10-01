@@ -24,8 +24,8 @@ POSTGRES_DSN = f'''dbname='fever' user='{USER}' host='{HOST}' password='{PASS}' 
 BATCH_SIZE = 1000
 
 def main():
-    model_a = SentenceTransformer('bert-base-nli-mean-tokens')
-    model_b = SentenceTransformer('bert-base-nli-mean-tokens')
+    model_a = SentenceTransformer('bert-large-nli-mean-tokens')
+    model_b = SentenceTransformer('bert-large-nli-mean-tokens')
     model = BiSentenceTransformer(model_a, model_b)
     train_batch_size = 2
     num_epochs = 1
