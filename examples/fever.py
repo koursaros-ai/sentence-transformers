@@ -60,8 +60,9 @@ def eval():
         join test.elastic el on c.id = el.claim_id
         join wiki.articles a on a.fever_id = any(el.fever_ids)
         join wiki.lines l on l.article_id = a.id
-        left join test.knn_benchmark b on b.claim_id = c.id
-        where is_test_set and b.claim_id is null limit 20000 
+        left join test.knn_benchmark b on b.claim_id = c.id 
+        and b.line_number = l.line_number and b.article_id = l.article_id
+        where is_test_set and b.claim_id is null
         ''')
     res = cur.fetchall()
 
