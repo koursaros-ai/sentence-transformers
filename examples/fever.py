@@ -58,7 +58,7 @@ def eval():
         join test.elastic el on c.id = el.claim_id
         join wiki.articles a on a.fever_id = any(el.fever_ids)
         join wiki.lines l on l.article_id = a.id
-        where is_test_set
+        where is_test_set limit 10000
         ''')
     res = cur.fetchall()
 
@@ -88,5 +88,5 @@ def eval():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
     eval()
