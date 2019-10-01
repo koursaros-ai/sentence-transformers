@@ -24,8 +24,8 @@ POSTGRES_DSN = f'''dbname='fever' user='{USER}' host='{HOST}' password='{PASS}' 
 BATCH_SIZE = 1000
 
 def main():
-    model_a = SentenceTransformer('bert-large-nli-mean-tokens')
-    model_b = SentenceTransformer('bert-large-nli-mean-tokens')
+    model_a = SentenceTransformer('bert-base-nli-mean-tokens')
+    model_b = SentenceTransformer('bert-base-nli-mean-tokens')
     model = BiSentenceTransformer(model_a, model_b)
     train_batch_size = 2
     num_epochs = 1
@@ -38,7 +38,7 @@ def main():
     train_loss = losses.BiCosineSimilarityLoss(model)
 
     dev_examples = reader.get_examples('dev',table='test.scorer_test_title')
-    dev_data = SentencesDataset(examples=dev_examples, model=model)
+    dev_data = SentencesDataset(examples=dev_examples, model=model_a)
     dev_dataloader = DataLoader(dev_data, shuffle=False, batch_size=train_batch_size)
     evaluator = EmbeddingSimilarityEvaluator(dev_dataloader)
 
@@ -101,8 +101,8 @@ def eval():
 
 
 if __name__ == '__main__':
-    # main()
-    eval()
+    main()
+    # eval()
 
     # CONVERT TO TENSORFLOW FOR BERT_AS_A_SERVICE?
     # from pytorch_transformers.convert_pytorch_checkpoint_to_tf import convert_pytorch_checkpoint_to_tf

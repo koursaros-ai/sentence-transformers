@@ -9,6 +9,7 @@ from torch import nn, Tensor
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from tqdm import tqdm, trange
+import numpy as np
 
 from .evaluation import SentenceEvaluator
 from .util import import_from_string, batch_to_device, http_get
@@ -17,9 +18,10 @@ from .util import import_from_string, batch_to_device, http_get
 class BiSentenceTransformer(nn.Module):
 
     def __init__(self, model_a : SentenceTransformer, model_b : SentenceTransformer):
+        super().__init__()
         self.model_a = model_a
         self.model_b = model_b
-        super().__init__()
+
 
     def forward(self, features):
         sent_a, sent_b = features
@@ -78,8 +80,10 @@ class BiSentenceTransformer(nn.Module):
 
         dataloader, loss_model = train_objective
 
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        loss_model.to(device)
+        dataloader.collate_fn = self.smart_batching_collate
+
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        loss_model.to(self.device)
 
         self.best_score = -9999
 
@@ -129,6 +133,7 @@ class BiSentenceTransformer(nn.Module):
                     data_iterator = iter(dataloader)
                     data = next(data_iterator)
 
+                print(data)
                 features, labels = batch_to_device(data, self.device)
                 loss_value = loss_model(features, labels)
 
@@ -162,3 +167,63 @@ class BiSentenceTransformer(nn.Module):
                 if score > self.best_score and save_best_model:
                     self.save(output_path)
                     self.best_score = score
+
+    def _get_scheduler(self, optimizer, scheduler: str, warmup_steps: int, t_total: int):
+        """
+        Returns the correct learning rate scheduler
+        """
+        scheduler = scheduler.lower()
+        if scheduler == 'constantlr':
+            return pytorch_transformers.ConstantLRSchedule(optimizer)
+        elif scheduler == 'warmupconstant':
+            return pytorch_transformers.WarmupConstantSchedule(optimizer, warmup_steps=warmup_steps)
+        elif scheduler == 'warmuplinear':
+            return pytorch_transformers.WarmupLinearSchedule(optimizer, warmup_steps=warmup_steps, t_total=t_total)
+        elif scheduler == 'warmupcosine':
+            return pytorch_transformers.WarmupCosineSchedule(optimizer, warmup_steps=warmup_steps, t_total=t_total)
+        elif scheduler == 'warmupcosinewithhardrestarts':
+            return pytorch_transformers.WarmupCosineWithHardRestartsSchedule(optimizer, warmup_steps=warmup_steps, t_total=t_total)
+        else:
+            raise ValueError("Unknown scheduler {}".format(scheduler))
+
+    def smart_batching_collate(self, batch):
+        """
+        Transforms a batch from a SmartBatchingDataset to a batch of tensors for the model
+
+        :param batch:
+            a batch from a SmartBatchingDataset
+        :return:
+            a batch of tensors for the model
+        """
+        num_texts = len(batch[0][0])
+
+        labels = []
+        paired_texts = [[] for _ in range(num_texts)]
+        max_seq_len = [0] * num_texts
+        for tokens, label in batch:
+            labels.append(label)
+            for i in range(num_texts):
+                paired_texts[i].append(tokens[i])
+                max_seq_len[i] = max(max_seq_len[i], len(tokens[i]))
+
+        features = []
+        for idx in range(num_texts):
+            max_len = max_seq_len[idx]
+            feature_lists = {}
+            for text in paired_texts[idx]:
+                sentence_features = self.get_sentence_features(text, max_len)
+
+                for feature_name in sentence_features:
+                    if feature_name not in feature_lists:
+                        feature_lists[feature_name] = []
+                    feature_lists[feature_name].append(sentence_features[feature_name])
+
+            for feature_name in feature_lists:
+                feature_lists[feature_name] = torch.tensor(np.asarray(feature_lists[feature_name]))
+
+            features.append(feature_lists)
+
+        return {'features': features, 'labels': torch.stack(labels)}
+
+    def get_sentence_features(self, *features):
+        return self.model_a.get_sentence_features(*features)
