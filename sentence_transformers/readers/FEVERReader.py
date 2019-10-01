@@ -36,6 +36,7 @@ class FEVERReader:
         """
         filename specified which data split to use (train.csv, dev.csv, test.csv).
         """
+        print('trying to connect to postgres...')
         conn = psycopg2.connect(POSTGRES_DSN)
         cur = conn.cursor()
         print('connected to postgres')
