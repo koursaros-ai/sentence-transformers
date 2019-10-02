@@ -50,7 +50,8 @@ def main():
               output_path_base=model_save_path)
 
 def eval():
-    model = SentenceTransformer('./fever-output')
+    modela = SentenceTransformer('./fever-output0')
+    modelb = SentenceTransformer('./fever-output1')
 
     print('trying to connect to postgres...')
     conn = psycopg2.connect(POSTGRES_DSN)
@@ -73,10 +74,10 @@ def eval():
         claims = [x[0] for x in batch]
         evidences = [x[1] for x in batch]
         start = time.time()
-        claim_vectors = model.encode(claims)
+        claim_vectors = modela.encode(claims)
         print(f'encoded claims in {time.time() - start} seconds')
         state = time.time()
-        ev_vectors = model.encode(evidences)
+        ev_vectors = modelb.encode(evidences)
         print(f'encoded evidence in {time.time() - start} seconds')
         start = time.time()
         scores = [float(dot(claim, evidence)) / (norm(claim) * norm(evidence))
