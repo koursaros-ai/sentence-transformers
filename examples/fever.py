@@ -50,8 +50,8 @@ def main():
               output_path_base=model_save_path)
 
 def eval():
-    modela = SentenceTransformer('./fever-output0')
-    modelb = SentenceTransformer('./fever-output1')
+    modela = SentenceTransformer('./fever-output1')
+    modelb = SentenceTransformer('./fever-output0')
 
     print('trying to connect to postgres...')
     conn = psycopg2.connect(POSTGRES_DSN)
