@@ -66,6 +66,7 @@ def eval():
         left join test.knn_benchmark b on b.claim_id = c.id 
         and b.line_number = l.line_number and b.article_id = l.article_id
         where is_test_set and b.claim_id is null and verifiable
+        limit 10000
         ''')
     res = cur.fetchall()
 
