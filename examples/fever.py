@@ -45,7 +45,7 @@ def main():
     model.fit(train_objective=(train_dataloader, train_loss),
               evaluator=evaluator,
               epochs=num_epochs,
-              evaluation_steps=5000,
+              evaluation_steps=20000,
               warmup_steps=warmup_steps,
               output_path_base=model_save_path)
 
