@@ -151,7 +151,7 @@ class BiSentenceTransformer(nn.Module):
                 global_step += 1
 
                 if evaluation_steps > 0 and training_steps % evaluation_steps == 0:
-                    self._eval_during_training(evaluator, output_paths, save_best_model, epoch, training_steps)
+                    # self._eval_during_training(evaluator, output_paths, save_best_model, epoch, training_steps)
                     loss_model.zero_grad()
                     loss_model.train()
 
