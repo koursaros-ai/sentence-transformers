@@ -102,8 +102,8 @@ def eval():
 
 
 if __name__ == '__main__':
-    main()
-    # eval()
+    # main()
+    eval()
 
     # CONVERT TO TENSORFLOW FOR BERT_AS_A_SERVICE?
     # from pytorch_transformers.convert_pytorch_checkpoint_to_tf import convert_pytorch_checkpoint_to_tf
