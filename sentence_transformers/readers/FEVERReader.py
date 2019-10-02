@@ -40,7 +40,7 @@ class FEVERReader:
         conn = psycopg2.connect(POSTGRES_DSN)
         cur = conn.cursor()
         print('connected to postgres')
-        limit = 'limit 500' if split == 'dev' else 'limit 10000'
+        limit = 'limit 500' if split == 'dev' else 'limit 5000'
         cur.execute(f'''
                 select * from {table} order by random() {limit}
                 ''')

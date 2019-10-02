@@ -155,7 +155,8 @@ class BiSentenceTransformer(nn.Module):
                     loss_model.zero_grad()
                     loss_model.train()
 
-            self._eval_during_training(evaluator, output_paths, save_best_model, epoch, -1)
+            self.model_a.save(output_paths[0])
+            self.model_b.save(output_paths[1])
 
     def _eval_during_training(self, evaluator, output_paths, save_best_model, epoch, steps):
         """Runs evaluation during the training"""
