@@ -7,7 +7,7 @@ import psycopg2
 
 HOST = '54.196.150.193'
 USER = 'postgres'
-PASS = os.environ.get('PG_PASS')
+PASS = os.environ.get('PGPASS')
 PGSSLROOTCERT = os.environ.get('PGSSLROOTCERT')
 if PASS == None or PGSSLROOTCERT == None:
     print("Please set PG_PASS and PGSSLROOTCERT env variable")

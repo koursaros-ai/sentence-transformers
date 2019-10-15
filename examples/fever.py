@@ -19,7 +19,6 @@ if PASS == None or PGSSLROOTCERT == None:
     raise SystemExit()
 DBNAME = 'fever'
 os.environ['PGSSLMODE'] = 'verify-ca'
-__location__ = os.path.dirname(__file__)
 POSTGRES_DSN = f'''dbname='fever' user='{USER}' host='{HOST}' password='{PASS}' '''
 BATCH_SIZE = 1000
 
