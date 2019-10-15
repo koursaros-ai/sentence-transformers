@@ -233,7 +233,7 @@ class SentenceTransformer(nn.Sequential):
             output_path: str = None,
             save_best_model: bool = True,
             max_grad_norm: float = 1,
-            fp16: bool = False,
+            fp16: bool = True,
             fp16_opt_level: str = '01',
             local_rank: int = -1
             ):
