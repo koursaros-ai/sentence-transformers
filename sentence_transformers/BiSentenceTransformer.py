@@ -70,13 +70,13 @@ class BiSentenceTransformer(nn.Module):
         :param evaluator:
         :param epochs:
         """
-        output_paths = [ output_path_base + str(i) for i in [0,1]]
-        for path in output_paths:
-            if path is not None:
-                os.makedirs(path, exist_ok=True)
-                if os.listdir(path):
-                    raise ValueError("Output directory ({}) already exists and is not empty.".format(
-                        path))
+        # output_paths = [ output_path_base + str(i) for i in [0,1]]
+        # for path in output_paths:
+        #     if path is not None:
+        #         os.makedirs(path, exist_ok=True)
+        #         if os.listdir(path):
+        #             raise ValueError("Output directory ({}) already exists and is not empty.".format(
+        #                 path))
 
         dataloader, loss_model = train_objective
 
@@ -156,8 +156,8 @@ class BiSentenceTransformer(nn.Module):
                 #     loss_model.zero_grad()
                 #     loss_model.train()
 
-            self.model_a.save(output_paths[0])
-            self.model_b.save(output_paths[1])
+            self.model_a.save(output_path_base)
+            self.model_b.save(output_path_base) # save Query model
 
     def _eval_during_training(self, evaluator, output_paths, save_best_model, epoch, steps):
         """Runs evaluation during the training"""
