@@ -226,4 +226,4 @@ class BiSentenceTransformer(nn.Module):
         return {'features': features, 'labels': torch.stack(labels)}
 
     def get_sentence_features(self, *features):
-        return self.model_a.get_sentence_features(*features)
+        return self.model_b.get_sentence_features(*features)
