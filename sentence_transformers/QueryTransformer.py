@@ -1,6 +1,7 @@
 import torch
 from torch import nn
 from collections import OrderedDict
+import os
 
 from . import SentenceTransformer
 
@@ -15,3 +16,7 @@ class QueryTransformer(nn.Module):
         output = self.sentence_transformer(features)['sentence_embedding']
         features.update({'sentence_embedding': self.linear(output)})
         return features
+
+    def save(self, path):
+        save_path = os.path.join(path, 'QueryTransformer')
+        self.save(save_path)
