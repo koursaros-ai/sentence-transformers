@@ -13,14 +13,15 @@ import numpy as np
 
 from .evaluation import SentenceEvaluator
 from .util import import_from_string, batch_to_device, http_get
+from .QueryTransformer import QueryTransformer
 
 
 class BiSentenceTransformer(nn.Module):
 
-    def __init__(self, model_a : SentenceTransformer, model_b : SentenceTransformer):
+    def __init__(self, model_a : SentenceTransformer):
         super().__init__()
         self.model_a = model_a
-        self.model_b = model_b
+        self.model_b = QueryTransformer(model_a, 768)
 
     def forward(self, features):
         sent_a, sent_b = features

@@ -234,7 +234,7 @@ class SentenceTransformer(nn.Sequential):
             save_best_model: bool = True,
             max_grad_norm: float = 1,
             fp16: bool = True,
-            fp16_opt_level: str = '01',
+            fp16_opt_level: str = 'O1',
             local_rank: int = -1
             ):
         """
@@ -317,6 +317,7 @@ class SentenceTransformer(nn.Sequential):
         data_iterators = [iter(dataloader) for dataloader in dataloaders]
 
         num_train_objectives = len(train_objectives)
+
         for epoch in trange(epochs, desc="Epoch"):
             training_steps = 0
 
@@ -342,6 +343,7 @@ class SentenceTransformer(nn.Sequential):
 
                 features, labels = batch_to_device(data, self.device)
                 loss_value = loss_model(features, labels)
+                print(f'loss: {loss_value}')
 
                 if fp16:
                     with amp.scale_loss(loss_value, optimizer) as scaled_loss:
