@@ -18,5 +18,5 @@ class QueryTransformer(nn.Module):
         return features
 
     def save(self, path):
-        save_path = os.path.join(path, 'QueryTransformer')
+        save_path = os.path.join(path, 'Query')
         self.save(save_path)
