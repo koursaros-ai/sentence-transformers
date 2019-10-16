@@ -13,4 +13,5 @@ class QueryTransformer(nn.Module):
 
     def forward(self, features):
         output = self.sentence_transformer(features)['sentence_embedding']
-        return self.linear(output)
+        features.update({'sentence_embedding': self.linear(output)})
+        return features
