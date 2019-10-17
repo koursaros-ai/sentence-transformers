@@ -112,10 +112,9 @@ class BiSentenceTransformer(nn.Module):
             except ImportError:
                 raise ImportError("Please install apex from https://www.github.com/nvidia/apex to use fp16 training.")
 
-            from torch.nn.functional import cosine_similarity
-            print(cosine_similarity)
+            print(torch.nn.functional.cosine_similiarity)
             model, optimizer = amp.initialize(loss_model, optimizer, opt_level=fp16_opt_level)
-            print(cosine_similarity)
+            print(torch.nn.functional.cosine_similiarity)
             loss_model = model
             optimizer = optimizer
 
