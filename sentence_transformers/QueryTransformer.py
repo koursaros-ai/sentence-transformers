@@ -24,7 +24,7 @@ class QueryTransformer(nn.Module):
 
     def save(self, path):
         save_path = os.path.join(path, 'Query')
-        self.save(save_path)
+        torch.save(self.linear.state_dict(), save_path)
 
     def load(self, path):
         load_path = os.path.join(path, 'Query', 'pytorch_model.bin')
