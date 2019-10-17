@@ -18,10 +18,10 @@ from .QueryTransformer import QueryTransformer
 
 class BiSentenceTransformer(nn.Module):
 
-    def __init__(self, model_b : SentenceTransformer, dims : int = 768):
+    def __init__(self, model_b : SentenceTransformer, dims : int = 768, path=None):
         super().__init__()
         self.model_b = model_b
-        self.model_a = QueryTransformer(model_b, dims)
+        self.model_a = QueryTransformer(model_b, dims, path=path)
 
     def forward(self, features):
         sent_a, sent_b = features
