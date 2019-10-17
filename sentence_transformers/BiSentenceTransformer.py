@@ -44,7 +44,7 @@ class BiSentenceTransformer(nn.Module):
             save_best_model: bool = True,
             max_grad_norm: float = 1,
             fp16: bool = True,
-            fp16_opt_level: str = '01',
+            fp16_opt_level: str = 'O1',
             local_rank: int = -1
             ):
         """

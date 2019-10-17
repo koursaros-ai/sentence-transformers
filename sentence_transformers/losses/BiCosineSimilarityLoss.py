@@ -13,7 +13,7 @@ class BiCosineSimilarityLoss(nn.Module):
     def forward(self, sentence_features: Iterable[Dict[str, Tensor]], labels: Tensor):
         rep_a, rep_b = self.model(sentence_features)
 
-        output = cosine_similarity(rep_a, rep_b)
+        output = cosine_similarity(rep_a.float(), rep_b.float())
         loss_fct = nn.MSELoss()
         if labels is not None:
             loss = loss_fct(output, labels.view(-1))
