@@ -23,7 +23,6 @@ class QueryTransformer(nn.Module):
         return features
 
     def save(self, path):
-        self.sentence_transformer.save(path)
         save_path = os.path.join(path, 'Query')
         self.save(save_path)
 
