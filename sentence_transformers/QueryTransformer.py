@@ -17,9 +17,6 @@ class QueryTransformer(nn.Module):
         if path:
             self.load(path)
 
-    def tokenize(self, *args):
-        return self.sentence_transformer.tokenize(*args)
-
     def forward(self, features):
         output = self.sentence_transformer(features)['sentence_embedding']
         features.update({'sentence_embedding': self.linear(output)})
@@ -65,13 +62,13 @@ class QueryTransformer(nn.Module):
 
             for idx in length_sorted_idx[batch_start: batch_end]:
                 sentence = sentences[idx]
-                tokens = self.tokenize(sentence)
+                tokens = self.sentence_transformer.tokenize(sentence)
                 longest_seq = max(longest_seq, len(tokens))
                 batch_tokens.append(tokens)
 
             features = {}
             for text in batch_tokens:
-                sentence_features = self.get_sentence_features(text, longest_seq)
+                sentence_features = self.sentence_transformer.get_sentence_features(text, longest_seq)
 
                 for feature_name in sentence_features:
                     if feature_name not in features:
@@ -79,7 +76,7 @@ class QueryTransformer(nn.Module):
                     features[feature_name].append(sentence_features[feature_name])
 
             for feature_name in features:
-                features[feature_name] = torch.tensor(np.asarray(features[feature_name])).to(self.device)
+                features[feature_name] = torch.tensor(np.asarray(features[feature_name])).to(self.sentence_transformer.device)
 
             with torch.no_grad():
                 embeddings = self.forward(features)
