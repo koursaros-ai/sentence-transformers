@@ -18,7 +18,7 @@ class QueryTransformer(nn.Module):
             self.load(path)
 
     def tokenize(self, *args):
-        self.sentence_transformer.tokenize(*args)
+        return self.sentence_transformer.tokenize(*args)
 
     def forward(self, features):
         output = self.sentence_transformer(features)['sentence_embedding']
