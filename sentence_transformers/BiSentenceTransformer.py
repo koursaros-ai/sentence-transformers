@@ -18,16 +18,15 @@ from .QueryTransformer import QueryTransformer
 
 class BiSentenceTransformer(nn.Module):
 
-    def __init__(self, model_b : SentenceTransformer, dims : int = 768, path=None):
+    def __init__(self, path, dims : int = 768):
         super().__init__()
-        self.model_b = model_b
-        self.model_a = QueryTransformer(model_b, dims, path=path)
+        self.model_b = SentenceTransformer(path)
+        self.model_a = QueryTransformer(self.model_b, dims, path=path)
 
     def forward(self, features):
         sent_a, sent_b = features
         features_a = self.model_a(sent_a)['sentence_embedding']
         features_b = self.model_b(sent_b)['sentence_embedding']
-        # features.update({'embedding_a' : features_a, 'embedding_b' : features_b})
         return features_a, features_b
 
     def fit(self,
@@ -152,11 +151,6 @@ class BiSentenceTransformer(nn.Module):
                 scheduler.step()
                 optimizer.zero_grad()
                 global_step += 1
-
-                # if evaluation_steps > 0 and training_steps % evaluation_steps == 0:
-                #     # self._eval_during_training(evaluator, output_paths, save_best_model, epoch, training_steps)
-                #     loss_model.zero_grad()
-                #     loss_model.train()
 
             self.model_a.save(output_path_base)
             self.model_b.save(output_path_base) # save Query model
